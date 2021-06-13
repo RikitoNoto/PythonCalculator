@@ -150,6 +150,19 @@ class CalculatorTest(unittest.TestCase):
         self.calculator.right_value = self.RIGHT_VALUE
         self.assertEqual(self.calculator.right_value, self.RIGHT_VALUE)
 
+    def test_invalid_value_in_left_value(self):
+        """
+        left_valueに無効な値が入っている時に正しく例外が発生すること
+        """
+        with self.assertRaises(Calculator.CalculatorValueError):
+            self.calculator.left_value = "a"
+
+    def test_invalid_value_in_right_value(self):
+        """
+        right_valueに無効な値が入っている時に正しく例外が発生すること
+        """
+        with self.assertRaises(Calculator.CalculatorValueError):
+            self.calculator.right_value = "a"
 
 if __name__ == '__main__':
     unittest.main()
