@@ -32,7 +32,7 @@ class Calculator:
         return self.__leftvalue
 
     def set_left_value(self, value):
-        pass
+        self.__left_value=value
 
     def get_right_value(self):
         return self.__right_value
@@ -41,10 +41,10 @@ class Calculator:
         self.__right_value=value
 
     def get_operator(self): 
-        return self.operator
+        return self.__operator
 
     def set_operator(self, op):
-        pass
+        self.__operator=op
 
     left_value = property(get_left_value, set_left_value)
     right_value = property(get_right_value, set_right_value)
