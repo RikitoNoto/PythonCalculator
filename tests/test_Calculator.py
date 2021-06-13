@@ -31,16 +31,35 @@ class CalculatorTest(unittest.TestCase):
         self.calculator.right_value = right
 
     def test_add_unit(self):
+        """
+        add関数の単体テスト
+        """
+        self.substitution_left_right()
         self.assertEqual(self.calculator.add(), self.LEFT_VALUE + self.RIGHT_VALUE)
 
+    @unittest.skip("write the code")
     def test_sub_unit(self):
-        self.assertEqual(self.calculator.sub(), self.LEFT_VALUE + self.RIGHT_VALUE)
+        """
+        sub関数の単体テスト
+        """
+        self.substitution_left_right()
+        self.assertEqual(self.calculator.sub(), self.LEFT_VALUE - self.RIGHT_VALUE)
 
+    @unittest.skip("write the code")
     def test_multi_unit(self):
-        self.assertEqual(self.calculator.multi(), self.LEFT_VALUE + self.RIGHT_VALUE)
+        """
+        multi関数の単体テスト
+        """
+        self.substitution_left_right()
+        self.assertEqual(self.calculator.multi(), self.LEFT_VALUE * self.RIGHT_VALUE)
 
+    @unittest.skip("write the code")
     def test_divi_unit(self):
-        self.assertEqual(self.calculator.divi(), self.LEFT_VALUE + self.RIGHT_VALUE)
+        """
+        divi関数の単体テスト
+        """
+        self.substitution_left_right()
+        self.assertEqual(self.calculator.divi(), self.LEFT_VALUE / self.RIGHT_VALUE)
 
     @unittest.skip("write the code")
     def test_add(self):
