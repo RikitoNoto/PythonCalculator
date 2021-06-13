@@ -26,6 +26,22 @@ class CalculatorTest(unittest.TestCase):
         """
         self.calculator = Calculator(left_value)
 
+    def substitution_left_right(self, left=LEFT_VALUE, right=RIGHT_VALUE):
+        self.calculator.left_value = left
+        self.calculator.right_value = right
+
+    def test_add_unit(self):
+        self.assertEqual(self.calculator.add(), self.LEFT_VALUE + self.RIGHT_VALUE)
+
+    def test_sub_unit(self):
+        self.assertEqual(self.calculator.sub(), self.LEFT_VALUE + self.RIGHT_VALUE)
+
+    def test_multi_unit(self):
+        self.assertEqual(self.calculator.multi(), self.LEFT_VALUE + self.RIGHT_VALUE)
+
+    def test_divi_unit(self):
+        self.assertEqual(self.calculator.divi(), self.LEFT_VALUE + self.RIGHT_VALUE)
+
     @unittest.skip("write the code")
     def test_add(self):
         """

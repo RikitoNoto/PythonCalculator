@@ -13,6 +13,15 @@ class Calculator:
         result=self.__left_value + self.__right_value
         return result
 
+    def sub(self):
+        pass
+
+    def multi(self):
+        pass
+
+    def divi(self):
+        pass
+
 
 
     @property
