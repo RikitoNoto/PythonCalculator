@@ -1,34 +1,53 @@
 
+from unittest.main import main
+
+
 class Calculator:
 
     def __init__(self, left_value):
-        pass
+        self.__leftvalue=left_value
 
     def calculate(self):
         pass
+    def add(self):
+        result=self.__left_value + self.__right_value
+        return result
+
+
 
     @property
     def formula(self)->str:
         pass
 
     def get_left_value(self):
-        pass
+        return self.__leftvalue
 
     def set_left_value(self, value):
         pass
 
     def get_right_value(self):
-        pass
+        return self.__right_value
 
     def set_right_value(self, value):
-        pass
+        self.__right_value=value
 
-    def get_operator(self):
-        pass
+    def get_operator(self): 
+        return self.operator
 
     def set_operator(self, op):
         pass
 
     left_value = property(get_left_value, set_left_value)
     right_value = property(get_right_value, set_right_value)
-    operator = property(get_operator, set_operator)
+    operator = property(get_operator, set_operator) #演算子 +-*/
+
+if __name__ == '__main__':
+    operator = 3
+    def num ():
+        return operator 
+
+    print(num())
+
+
+
+

@@ -106,7 +106,7 @@ class CalculatorTest(unittest.TestCase):
         """
         self.assertEqual(self.calculator.left_value, self.LEFT_VALUE)
 
-    @unittest.skip("write the code")
+    # @unittest.skip("write the code")
     def test_right_value(self):
         """
         右辺の代入が正しくできるかのテスト
