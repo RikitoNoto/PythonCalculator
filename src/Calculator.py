@@ -1,12 +1,12 @@
 
-from unittest.main import main
-
+# from unittest.main import main
 
 class Calculator:
     PLUS = 0 
     SUB  = 1
     MULTI = 2
     DIVI = 3
+    VALID_TYPE = (int, float)
 
     def __init__(self, left_value):
         self.__left_value=left_value
@@ -76,12 +76,17 @@ class Calculator:
         return self.__left_value
 
     def set_left_value(self, value):
+        if(not isinstance(value, self.VALID_TYPE)):
+            raise self.CalculatorValueError("左辺には数値しか代入できません。")
         self.__left_value=value
+
 
     def get_right_value(self):
         return self.__right_value
 
     def set_right_value(self, value):
+        if(not isinstance(value, self.VALID_TYPE)):
+            raise self.CalculatorValueError("右辺には数値しか代入できません。")
         self.__right_value=value
 
     def get_operator(self): 
@@ -93,6 +98,9 @@ class Calculator:
     left_value = property(get_left_value, set_left_value)
     right_value = property(get_right_value, set_right_value)
     operator = property(get_operator, set_operator) #演算子 +-*/
+
+    class CalculatorValueError(Exception):
+        pass
 
 if __name__ == '__main__':
 
