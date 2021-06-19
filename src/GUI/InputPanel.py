@@ -7,7 +7,10 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.window import Keyboard
 
-from SendCharacters import SendCharacters
+try:
+    from SendCharacters import SendCharacters
+except ModuleNotFoundError:
+    from .SendCharacters import SendCharacters
 
 class InputButton(Button):
     """
