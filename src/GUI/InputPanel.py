@@ -1,4 +1,5 @@
 import os
+import sys
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
@@ -7,10 +8,11 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.window import Keyboard
 
+sys.path.append(os.path.abspath(".."))
 try:
     from SendCharacters import SendCharacters
 except ModuleNotFoundError:
-    from .SendCharacters import SendCharacters
+    from src.SendCharacters import SendCharacters
 
 class InputButton(Button):
     """

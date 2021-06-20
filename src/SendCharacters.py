@@ -55,3 +55,13 @@ class SendCharacters:
                  return value
          else:
              return None
+
+    @staticmethod
+    def to_num(value:str)->Union[int, float]:
+        value_text = ""
+        for char in str(value):
+            value_text += SendCharacters.VALUE_DICT[char]
+        if "." in value_text:
+            return float(value_text)
+        else:
+            return int(value_text)

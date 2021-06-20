@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(".."))
 from src.CalculatorManager import CalculatorManager
 from src.GUIManager import GUIManager
 from src.Calculator import Calculator
-from src.GUI.SendCharacters import SendCharacters
+from src.SendCharacters import SendCharacters
 
 
 class CalculatorManagerTest(unittest.TestCase):
@@ -48,8 +48,19 @@ class CalculatorManagerTest(unittest.TestCase):
         イコールボタンが押下された時に計算処理が呼び出されること
         """
         calculator_stub = self.create_calculator()
+        self.input_value_by_num_event(0, operation=None)
         self.__manager.eq_event_handler(SendCharacters.EQUAL)
         calculator_stub.return_value.calculate.assert_called_with()
+
+    def test_when_equal_event_create_right_value(self):
+        """
+        イコールボタンが押下された時に右辺が作成されていること
+        """
+        value = 34234
+        calculator_stub = self.create_calculator()
+        self.input_value_by_num_event(value, operation=None)
+        self.__manager.eq_event_handler(SendCharacters.EQUAL)
+        self.assertEqual(calculator_stub.return_value.right_value, value)
 
     def test_after_equal_event_output_display(self):
         """
@@ -58,6 +69,7 @@ class CalculatorManagerTest(unittest.TestCase):
         output = "230974"
         calculator_stub = self.create_calculator()
         calculator_stub.return_value.calculate.return_value = output#Calculateメソッドの返り値をoutputに変更
+        self.input_value_by_num_event(0, operation=None)
         self.__manager.eq_event_handler(SendCharacters.EQUAL)
         self.main_display_check(output)
 
@@ -83,6 +95,16 @@ class CalculatorManagerTest(unittest.TestCase):
 
         calculator_stub.assert_called_with(value)
 
+    def test_should_be_able_to_display_num(self):
+        """
+        num入力イベント時に画面に表示できているか
+        """
+        self.input_value_by_num_event(3, operation=None)
+        self.main_display_check("3")
+
+        self.input_value_by_num_event(6, operation=None)
+        self.main_display_check("36")
+
     @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
     def test_should_be_able_to_create_decimal(self, calculator_stub: MagicMock):
         """
@@ -93,15 +115,35 @@ class CalculatorManagerTest(unittest.TestCase):
 
         calculator_stub.assert_called_with(value)
 
-    def test_when_operator_event_registe_operator(self):
+    def test_when_operator_event_registe_operator_add(self):
         """
-        operator入力イベントが実行された時にオペレータを正しく登録できているか。
+        operator入力イベントが実行された時にオペレータを正しく登録できているか。(足し算)
         """
-        plus = Calculator.PLUS
+        self.operator_check(SendCharacters.PLUS, Calculator.PLUS)
 
+    def test_when_operator_event_registe_operator_divi(self):
+        """
+        operator入力イベントが実行された時にオペレータを正しく登録できているか。(割り算)
+        """
+        self.operator_check(SendCharacters.DIVI, Calculator.DIVI)
+
+    def operator_check(self, send_char, registe_char):
+        """
+        オペレーターの変換ができているか
+        """
+        calculator_stub = self.registe_operator(send_char)
+        self.assertEqual(calculator_stub.return_value.operator, registe_char)
+
+
+    def registe_operator(self, operator=SendCharacters.PLUS)->MagicMock:
+        """
+        Calculatorのモックを作成し、オペレーターを登録後
+        そのモックを返す。
+        """
         with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
-            self.__manager.op_event_handler(SendCharacters.PLUS)
-            self.assertEqual(calculator_stub.operator, plus)
+            self.__manager.num_event_handler(SendCharacters.ZERO)
+            self.__manager.op_event_handler(operator)
+            return calculator_stub
 
 if __name__ == '__main__':
     unittest.main()
