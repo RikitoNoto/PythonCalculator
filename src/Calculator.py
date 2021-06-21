@@ -2,16 +2,29 @@
 # from unittest.main import main
 
 class Calculator:
-    PLUS = 0 
+    """
+    定数指定
+    0から3の数字に演算子を割り当てる
+
+    101=: 1+1=
+    111=: 1-1=
+    121=: 1×1=
+    131=: 1÷1=
+
+    """
+    PLUS = 0  #TODO 自動設定(autoメソッド)にしてスムーズに
     SUB  = 1
     MULTI = 2
     DIVI = 3
     VALID_TYPE = (int, float)
 
     def __init__(self, left_value):
+        """
+        self.__left_valueにleft_valueを代入
+        """
         self.__left_value=left_value
 
-    def calculate(self):
+    def calculate(self): #TODO 0～3以外の数値が入ったら例外発生させる。
         """
         =押されたときに実行される
         計算結果を返す
@@ -21,35 +34,60 @@ class Calculator:
         例：operatorが0の時、左辺+右辺を実行してその結果を返す。
         """
 
-        if self.__operator==0:
+        if self.__operator==0: #TODO マジックナンバーNG
             return self.add()
+            """
+            もしself.__operatorが0だったら self.add()を実行して返す。
+            """
         elif self.__operator==1:
             return self.sub()
+            """
+            もしself.__operatorが1だったら self.sub()を実行して返す。
+            """
         elif self.__operator==2:
             return self.multi()
+            """
+            もしself.__operatorが2だったら self.multi()を実行して返す。
+            """   
         elif self.__operator==3:
             return self.divi()
+            """
+            もしself.__operatorが3だったら self.divi()を実行して返す。
+            """   
         else:
             pass 
 
 
     def add(self):
-        result=self.__left_value + self.__right_value
-        return result
+        """
+        self.__left_value(左辺)とself.__right_value(右辺)の値を足し算したものをresultに代入してresult返す。
+        """
 
+        return self.__left_value + self.__right_value
+
+        
     def sub(self):
-        result=self.__left_value - self.__right_value
-        return result
+        """
+        self.__left_value(左辺)とself.__right_value(右辺)の値を引き算したものをresultに代入してresult返す。
+        """
+        return self.__left_value - self.__right_value 
+        
 
     def multi(self):
-        result=self.__left_value * self.__right_value
-        return result
+        """
+        self.__left_value(左辺)とself.__right_value(右辺)の値を掛け算したものをresultに代入してresult返す。
+        """
+        return self.__left_value * self.__right_value
 
-    def divi(self):
-        result=self.__left_value / self.__right_value
-        return result
 
-    def operator_char(self):
+    def divi(self): #TODO __right_valueが0の時の例外補足クラス内に追加。0割が出たら"0 で割ることはできません"と文字列を返す。
+        """
+        self.__left_value(左辺)とself.__right_value(右辺)の値を割り算したものをresultに代入してresult返す。
+        """
+        return self.__left_value / self.__right_value
+
+
+    def operator_char(self): #TODO elseに例外を発生させること。operatorに違う値入ったら誤動作起きるので
         """
         現在のオペレータの値にあった文字を返す
         例：operetor=PLUS
@@ -57,31 +95,68 @@ class Calculator:
         """
 
         if self.__operator==self.PLUS:
+            """
+            もしself.__operatorがself.PLUSだったら
+            "+"を返す。
+            """ 
             return "+"
+                       
         elif self.__operator==self.SUB:
+            """
+            もしself.__operatorがself.SUBだったら
+            "-"を返す。
+            """ 
             return "-"
+            
         elif self.__operator==self.MULTI:
+            """
+            もしself.__operatorがself.MULTIだったら
+            "×を返す。
+            """ 
             return "×"
-        else:
+            
+        else: 
+            """
+            それ以外は
+            "÷"を返す。
+            """ 
             return "÷"
 
 
     @property
-    def formula(self)->str:
-        return  str(self.__left_value)+str(self.operator_char())+str(self.__right_value)+"="
-            
+    def formula(self)->str:    #TODO right_valueが存在しない時も動作できるようにする。string.formatメソッド使用にして綺麗に。
+        """
+        str: 文字列に変換。
+
+        例:
+        str(self.__left_value)      :1 
+        str(self.operator_char())   :0
+        str(self.__right_value)     :1
+
+        1+1を返す。※ =が押されたとき。
+        """
+        return  str(self.__left_value)+str(self.operator_char())+str(self.__right_value) 
         
 
     def get_left_value(self):
+        """
+        self.__left_valueを返す。
+        """
         return self.__left_value
 
     def set_left_value(self, value):
+        """
+        もし
+        """
         if(not isinstance(value, self.VALID_TYPE)):
             raise self.CalculatorValueError("左辺には数値しか代入できません。")
         self.__left_value=value
 
 
     def get_right_value(self):
+        """
+        self.__right_valueを返す。
+        """
         return self.__right_value
 
     def set_right_value(self, value):
@@ -90,9 +165,15 @@ class Calculator:
         self.__right_value=value
 
     def get_operator(self): 
+        """
+        self.__operatorを返す。
+        """
         return self.__operator
 
     def set_operator(self, op):
+        """
+        self.__operatorにopを代入
+        """
         self.__operator=op
 
     left_value = property(get_left_value, set_left_value)
@@ -115,3 +196,8 @@ if __name__ == '__main__':
     #     return operator 
 
     # print(num())
+
+
+#TODO sphinxドキュメント出力できるようにコメント追加
+#TODO 指数(index)表記ができるようにcalculateメソッドの指数を返すパターン作成。
+#TODO masterブランチ コンフリクト解消。

@@ -105,7 +105,7 @@ class CalculatorTest(unittest.TestCase):
         :return:
         """
         self.test_add()
-        self.assertEqual(self.calculator.formula, "{}+{}=".format(self.LEFT_VALUE, self.RIGHT_VALUE))
+        self.assertEqual(self.calculator.formula, "{}+{}".format(self.LEFT_VALUE, self.RIGHT_VALUE))
 
     # @unittest.skip("write the code")
     def test_formula_sub(self):
@@ -114,7 +114,7 @@ class CalculatorTest(unittest.TestCase):
         :return:
         """
         self.test_sub()
-        self.assertEqual(self.calculator.formula, "{}-{}=".format(self.LEFT_VALUE, self.RIGHT_VALUE))
+        self.assertEqual(self.calculator.formula, "{}-{}".format(self.LEFT_VALUE, self.RIGHT_VALUE))
 
     # @unittest.skip("write the code")
     def test_formula_multi(self):
@@ -123,7 +123,7 @@ class CalculatorTest(unittest.TestCase):
         :return:
         """
         self.test_multi()
-        self.assertEqual(self.calculator.formula, "{}×{}=".format(self.LEFT_VALUE, self.RIGHT_VALUE))
+        self.assertEqual(self.calculator.formula, "{}×{}".format(self.LEFT_VALUE, self.RIGHT_VALUE))
 
     # @unittest.skip("write the code")
     def test_formula_divi(self):
@@ -132,7 +132,7 @@ class CalculatorTest(unittest.TestCase):
         :return:
         """
         self.test_divi()
-        self.assertEqual(self.calculator.formula, "{}÷{}=".format(self.LEFT_VALUE, self.RIGHT_VALUE))
+        self.assertEqual(self.calculator.formula, "{}÷{}".format(self.LEFT_VALUE, self.RIGHT_VALUE))
 
     # @unittest.skip("write the code")
     def test_left_value(self):
