@@ -12,7 +12,7 @@ class Calculator:
     131=: 1÷1=
 
     """
-    PLUS = 0  #TODO 自動設定(autoメソッド)にしてスムーズに
+    PLUS = 0  #TODO 自動設定(autoメソッド)にしてスムーズに。 後回し。
     SUB  = 1
     MULTI = 2
     DIVI = 3
@@ -24,7 +24,7 @@ class Calculator:
         """
         self.__left_value=left_value
 
-    def calculate(self): #TODO 0～3以外の数値が入ったら例外発生させる。
+    def calculate(self): #TODO 0～3以外の数値が入ったら例外発生させる。後回し。
         """
         =押されたときに実行される
         計算結果を返す
@@ -32,30 +32,32 @@ class Calculator:
         演算子に入っている値によって実行する式を変化させる
         
         例：operatorが0の時、左辺+右辺を実行してその結果を返す。
+
+        0～3以外の値だった場合、例外発生させる。
         """
 
-        if self.__operator==0: #TODO マジックナンバーNG
+        if self.__operator==self.PLUS: 
             return self.add()
             """
             もしself.__operatorが0だったら self.add()を実行して返す。
             """
-        elif self.__operator==1:
+        elif self.__operator==self.SUB:
             return self.sub()
             """
             もしself.__operatorが1だったら self.sub()を実行して返す。
             """
-        elif self.__operator==2:
+        elif self.__operator==self.MULTI:
             return self.multi()
             """
             もしself.__operatorが2だったら self.multi()を実行して返す。
             """   
-        elif self.__operator==3:
+        elif self.__operator==self.DIVI:
             return self.divi()
             """
             もしself.__operatorが3だったら self.divi()を実行して返す。
             """   
         else:
-            pass 
+            return 
 
 
     def add(self):
@@ -83,11 +85,14 @@ class Calculator:
     def divi(self): #TODO __right_valueが0の時の例外補足クラス内に追加。0割が出たら"0 で割ることはできません"と文字列を返す。
         """
         self.__left_value(左辺)とself.__right_value(右辺)の値を割り算したものをresultに代入してresult返す。
+
+        ※right_valueが0だったら
         """
+
         return self.__left_value / self.__right_value
 
 
-    def operator_char(self): #TODO elseに例外を発生させること。operatorに違う値入ったら誤動作起きるので
+    def operator_char(self): #TODO elseに例外を発生させること。operatorに違う値入ったら誤動作起きるので。後回し
         """
         現在のオペレータの値にあった文字を返す
         例：operetor=PLUS
@@ -115,16 +120,29 @@ class Calculator:
             """ 
             return "×"
             
-        else: 
+        elif self.__operator==self.DIVI:
             """
-            それ以外は
-            "÷"を返す。
+            もしself.__operatorがself.DIVIだったら
+            "÷を返す。
             """ 
             return "÷"
 
 
+        else: 
+            """
+            それ以外だったら
+            エラー
+            """ 
+            return ""
+
+    def index(self): #TODO calculateを指数に変換する関数。
+        
+
+
+
+
     @property
-    def formula(self)->str:    #TODO right_valueが存在しない時も動作できるようにする。string.formatメソッド使用にして綺麗に。
+    def formula(self)->str:    
         """
         str: 文字列に変換。
 
@@ -135,7 +153,23 @@ class Calculator:
 
         1+1を返す。※ =が押されたとき。
         """
-        return  str(self.__left_value)+str(self.operator_char())+str(self.__right_value) 
+
+
+        try:
+            return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value))
+
+        except AttributeError:
+            return "{0}{1}".format(str(self.__left_value),str(self.operator_char()))
+            
+
+
+
+        # if self.__right_value==None:
+        #     return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()))
+
+        # else:
+        #     return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value))
+        # # return  str(self.__left_value)+str(self.operator_char())+str(self.__right_value) 
         
 
     def get_left_value(self):
@@ -187,7 +221,7 @@ if __name__ == '__main__':
 
     calcu = Calculator(0)
     calcu.left_value = 1
-    calcu.right_value =2
+    # calcu.right_value =
     calcu.operator = Calculator.PLUS
     print(calcu.formula)
 
@@ -198,6 +232,6 @@ if __name__ == '__main__':
     # print(num())
 
 
-#TODO sphinxドキュメント出力できるようにコメント追加
+#TODO sphinxドキュメント出力できるようにコメント追加。
 #TODO 指数(index)表記ができるようにcalculateメソッドの指数を返すパターン作成。
-#TODO masterブランチ コンフリクト解消。
+#TODO masterブランチ コンフリクト解消。後回し。
