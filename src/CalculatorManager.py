@@ -25,27 +25,40 @@ class CalculatorManager:
         SendCharacters.MULTI: Calculator.MULTI,
         SendCharacters.DIVI: Calculator.DIVI
                      }
-
+    MAIN_DISPLAY_INITIAL = "0"
+    SUB_DISPLAY_INITIAL = ""
 
     def __init__(self):
         self.__gui = GUIManager(self.num_event_handler, self.op_event_handler, self.eq_event_handler)
         self.__reset_current_value()
+        self.__history = []
+        self.__history_count = 0
 
     def run(self):
         self.__gui.app_run()
+        self.gui_initial()
+
+    def gui_initial(self):
+        """
+        GUIの初期化処理
+        """
+        self.__gui.output_main(self.MAIN_DISPLAY_INITIAL)
+        self.__gui.output_sub(self.SUB_DISPLAY_INITIAL)
 
     def num_event_handler(self, input):
-        self.__current_value += input
+        self.__current_value += SendCharacters.return_value(input)
         self.__gui.output_main(str(self.__current_value))
 
     def op_event_handler(self, input):
         self.__calculator = Calculator(SendCharacters.to_num(self.__current_value))
         self.__calculator.operator = self.OPERATOR_DICT[input]
+        self.__gui.output_sub(self.__calculator.formula)
         self.__reset_current_value()
 
     def eq_event_handler(self, input):
         self.__calculator.right_value = SendCharacters.to_num(self.__current_value)
         self.__gui.output_main(str(self.__calculator.calculate()))
+        self.__registe_history(self.__calculator, del_calculator=True)
         self.__reset_current_value()
 
     def create_input_value(self):
@@ -53,8 +66,20 @@ class CalculatorManager:
         self.__reset_current_value()
         return value
 
+    def history_que(self, index):
+        if self.__history_count > 0:
+            return self.__history[index]
+        else:
+            return None
+
     def __reset_current_value(self):
         self.__current_value = ""
+
+    def __registe_history(self, history:Calculator, del_calculator=False):
+        self.__history.insert(0, history)
+        self.__history_count = self.__history_count + 1
+        del self.__calculator
+
 
 if __name__ == '__main__':
     CalculatorManager().run()

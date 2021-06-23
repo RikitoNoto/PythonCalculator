@@ -17,13 +17,26 @@ class CalculatorManagerTest(unittest.TestCase):
     @patch("src.CalculatorManager.GUIManager", spec=GUIManager)
     def setUp(self, gui_stub:MagicMock) -> None:
         self.__manager = CalculatorManager()
+        self.__manager.gui_initial()
         self.__gui_stub:MagicMock = gui_stub
 
     def main_display_check(self, text):
+        """
+        main_displayの表示が引数の文字列と一致しているかを確認する。
+        """
         try:
             self.assertEqual(self.__gui_stub.return_value.main_string, text)
         except AssertionError:
             self.__gui_stub.return_value.output_main.assert_called_with(text)
+
+    def sub_display_check(self, text):
+        """
+        sub_displayの表示が引数の文字列と一致しているかを確認する。
+        """
+        try:
+            self.assertEqual(self.__gui_stub.return_value.sub_string, text)
+        except AssertionError:
+            self.__gui_stub.return_value.output_sub.assert_called_with(text)
 
     @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
     def create_calculator(self, calculator_stub)->MagicMock:
@@ -42,6 +55,66 @@ class CalculatorManagerTest(unittest.TestCase):
             self.__manager.num_event_handler(char)
         if operation:
             self.__manager.op_event_handler(operation)
+
+    def operator_check(self, send_char, registe_char):
+        """
+        オペレーターの変換ができているか
+        """
+        calculator_stub = self.registe_operator(send_char)
+        self.assertEqual(calculator_stub.return_value.operator, registe_char)
+
+
+    def registe_operator(self, operator=SendCharacters.PLUS, left_value=0)->MagicMock:
+        """
+        Calculatorのモックを作成し、オペレーターを登録後
+        そのモックを返す。
+        """
+        with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
+            self.input_value_by_num_event(left_value, operation=operator)
+            return calculator_stub
+
+    def goto_finish_calculate(self, left_value=None, operator=None, right_value=None, eq_event=False):
+        """
+        引数で受け取った値にそって計算処理を実行していく
+        """
+        self.input_value_by_num_event(left_value, operation=operator)
+
+        if right_value:
+            for char in SendCharacters.consts(right_value):
+                self.__manager.num_event_handler(char)
+
+        if eq_event:
+            self.__manager.eq_event_handler(SendCharacters.EQUAL)
+
+    def check_calculator(self, calculator_stub, left_value=None, right_value=None, operator=None):
+        """
+        受け取ったCalculatorスタブが想定している値と一致しているかをチェックする。
+        """
+        calculator_instance = calculator_stub.return_value
+        if left_value:
+            try:
+                self.assertEqual(calculator_instance.left_value, left_value)
+            except AssertionError:
+                #TODO: .left_valueがモックオブジェクト出なければエラー発生
+                calculator_stub.assert_called_with(left_value)
+
+        if right_value:
+            self.assertEqual(calculator_instance.right_value, right_value)
+
+        if operator:
+            self.assertEqual(calculator_instance.operator, operator)
+
+    def test_when_initial_should_be_main_display_is_0(self):
+        """
+        初期化時にメインディスプレイは数値0が表示されていること
+        """
+        self.main_display_check("0")
+
+    def test_when_initial_should_be_sub_display_is_empty(self):
+        """
+        初期化時にサブディスプレイは何も表示されていないこと
+        """
+        self.sub_display_check("")
 
     def test_when_equal_event_call_calculate(self):
         """
@@ -127,23 +200,41 @@ class CalculatorManagerTest(unittest.TestCase):
         """
         self.operator_check(SendCharacters.DIVI, Calculator.DIVI)
 
-    def operator_check(self, send_char, registe_char):
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_when_operator_event_should_be_display_the_formula_to_sub_disp(self, calculator_stub: MagicMock):
         """
-        オペレーターの変換ができているか
+        operator入力イベント時にサブディスプレイに現在の式が表示されていること
         """
-        calculator_stub = self.registe_operator(send_char)
-        self.assertEqual(calculator_stub.return_value.operator, registe_char)
+        calculator_stub.return_value.formula = "124+"
+        self.input_value_by_num_event(124, SendCharacters.PLUS)
+        self.sub_display_check("124+")
 
-
-    def registe_operator(self, operator=SendCharacters.PLUS)->MagicMock:
+    def test_history_should_be_registe(self):
         """
-        Calculatorのモックを作成し、オペレーターを登録後
-        そのモックを返す。
+        計算後、ヒストリーに登録できていること
         """
+        operator = Calculator.PLUS
         with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
-            self.__manager.num_event_handler(SendCharacters.ZERO)
-            self.__manager.op_event_handler(operator)
-            return calculator_stub
+            self.goto_finish_calculate(SendCharacters.ZERO, SendCharacters.PLUS, SendCharacters.ZERO, True)
+            self.assertTrue(self.__manager.history_que(0))
+
+            if self.__manager.history_que(0):
+                self.check_calculator(calculator_stub, 0, 0, operator)
+
+    def test_should_be_calculate_double(self):
+        """
+        2回連続の計算ができること
+        """
+        operator1 = Calculator.PLUS
+        operator2 = Calculator.SUB
+
+        with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
+            self.goto_finish_calculate(left_value=9, operator=SendCharacters.PLUS, right_value=19, eq_event=True)
+            self.check_calculator(calculator_stub, left_value=9, right_value=19, operator=operator1)
+
+
+            self.goto_finish_calculate(left_value=102, operator=SendCharacters.MINUS, right_value=392, eq_event=True)
+            self.check_calculator(calculator_stub, left_value=102, right_value=392, operator=operator2)
 
 if __name__ == '__main__':
     unittest.main()
