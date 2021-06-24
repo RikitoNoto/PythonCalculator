@@ -89,7 +89,18 @@ class Calculator:
         ※right_valueが0だったら
         """
 
-        return self.__left_value / self.__right_value
+        if self.__right_value==0:
+            return "0 で割ることは出来ません。"
+
+        else:
+            return self.__left_value / self.__right_value
+        
+        # try:
+        #      self.__right_value==0
+        #     # return "0 で割ることはできません"
+
+        # except:
+        #     return "0 で割ることはできません"
 
 
     def operator_char(self): #TODO elseに例外を発生させること。operatorに違う値入ったら誤動作起きるので。後回し
@@ -135,10 +146,12 @@ class Calculator:
             """ 
             return ""
 
-    def index(self): #TODO calculateを指数に変換する関数。
-        
-
-
+    def index(self,digits): #TODO calculateを指数に変換する関数。
+        """
+        digitsに数値1が入った時、__digitsに".1E"が入るようにする。
+        """
+        __digits=digits
+        return format(self.calculate(),".{0}E".format(__digits))
 
 
     @property
@@ -154,7 +167,12 @@ class Calculator:
         1+1を返す。※ =が押されたとき。
         """
 
+        """
+        
+        try: 右辺str(self.__right_value)の値がなかった場合、例外発生させる。
+        except: 右辺str(self.__right_value)の値がなくても動作させる。
 
+        """
         try:
             return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value))
 
@@ -180,7 +198,7 @@ class Calculator:
 
     def set_left_value(self, value):
         """
-        もし
+        もしleftvalueに数値以外の値を代入しようとしたときにエラー発生させる。
         """
         if(not isinstance(value, self.VALID_TYPE)):
             raise self.CalculatorValueError("左辺には数値しか代入できません。")
@@ -205,7 +223,7 @@ class Calculator:
         return self.__operator
 
     def set_operator(self, op):
-        """
+        """ 
         self.__operatorにopを代入
         """
         self.__operator=op
@@ -219,11 +237,35 @@ class Calculator:
 
 if __name__ == '__main__':
 
-    calcu = Calculator(0)
-    calcu.left_value = 1
-    # calcu.right_value =
-    calcu.operator = Calculator.PLUS
-    print(calcu.formula)
+
+
+    result=Calculator(0)
+    result.left_value=10000000
+    result.right_value=1000000
+    result.operator=Calculator.MULTI
+
+    for a in range(10):
+        print(result.index(a))
+    
+    # print(format(result.calculate(),'.1E'))
+    # print(format(result.calculate(),'.2E'))
+    # print(format(result.calculate(),'.3E'))
+    # print(format(result.calculate(),'.4E'))
+    # print(format(result.calculate(),'.5E'))
+    # print(format(result.calculate(),'.6E'))
+    # print(format(result.calculate(),'.7E'))
+    # print(format(result.calculate(),'.8E'))
+    # print(format(result.calculate(),'.9E'))
+    # print(format(result.calculate(),'.10E'))
+
+
+
+    # calcu = Calculator(0)
+    # calcu.left_value = 1
+    # calcu.right_value =0
+    # calcu.operator = Calculator.DIVI
+    # print(calcu.formula)
+    
 
     # operator = 3
     # def num ():
