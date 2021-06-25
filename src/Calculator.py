@@ -150,8 +150,8 @@ class Calculator:
         """
         digitsに数値1が入った時、__digitsに".1E"が入るようにする。
         """
-        __digits=digits
-        return format(self.calculate(),".{0}E".format(__digits))
+        __digits=digits    
+        return format(self.calculate(),".{0}E".format(__digits)) 
 
 
     @property
