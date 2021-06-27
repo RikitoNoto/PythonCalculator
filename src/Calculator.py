@@ -1,7 +1,6 @@
 
-# from unittest.main import main
-
 class Calculator:
+
     """
     定数指定
     0から3の数字に演算子を割り当てる
@@ -153,7 +152,6 @@ class Calculator:
         __digits=digits    
         return format(self.calculate(),".{0}E".format(__digits)) 
 
-
     @property
     def formula(self)->str:    
         """
@@ -191,6 +189,7 @@ class Calculator:
         
 
     def get_left_value(self):
+
         """
         self.__left_valueを返す。
         """
@@ -204,6 +203,20 @@ class Calculator:
             raise self.CalculatorValueError("左辺には数値しか代入できません。")
         self.__left_value=value
 
+
+    def get_right_value(self):
+        """
+        self.__right_valueを返す。
+        """
+        return self.__right_value
+
+    def set_left_value(self, value):
+        """
+        もしleftvalueに数値以外の値を代入しようとしたときにエラー発生させる。
+        """
+        if(not isinstance(value, self.VALID_TYPE)):
+            raise self.CalculatorValueError("左辺には数値しか代入できません。")
+        self.__left_value=value
 
     def get_right_value(self):
         """

@@ -1,0 +1,137 @@
+#:kivy 2.0.0
+
+<InputButton>:
+    canvas.before:
+        Color:
+            rgba: .5, .5, .5, 1
+        Line:
+            width: 2
+            rectangle: self.x, self.y, self.width, self.height
+    size_hint_x: 1
+    size_hint_y: 1
+    send_data: ""
+    keycode: 0
+    font_size: 80
+    background_normal: ""
+
+<NumberButton@InputButton>:
+    background_color: 0.199, 0.199, 0.199
+    on_press: app.number_button_on_press(send_data=self.send_data)
+
+<DecimalButton@InputButton>:
+    background_color: 0.199, 0.199, 0.199
+    on_press: app.decimal_button_on_press(send_data=self.send_data)
+
+<OperatorButton@InputButton>:
+    background_color: 0.472, 0.429, 0.406
+    on_press: app.operator_button_on_press(send_data=self.send_data)
+
+<EqualButton@InputButton>:
+    background_color: 0.835, 0.476, 0.234
+    on_press: app.equal_button_on_press(send_data=self.send_data)
+
+<ACButton@InputButton>:
+    background_color: 0.472, 0.429, 0.406
+    on_press: app.ac_button_on_press(send_data=self.send_data)
+
+<InputPanel>:
+    orientation: "vertical"
+    canvas.before:
+        Color:
+            rgba: app.BACK_GROUND_COLOR
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    ButtonContainer:
+        ACButton:
+            send_data: root.AC
+            keycode: root.key_codes["escape"]
+            font_size: 60
+            text: "AC"
+        Widget:
+#            canvas.before:
+#                Color:
+#                    rgba: 0.2,0.2,0.2,0.3
+#                Rectangle:
+#                    size: self.size
+#                    pos: self.pos
+        Widget:
+#            canvas.before:
+#                Color:
+#                    rgba: 0.2,0.2,0.2,0.3
+#                Rectangle:
+#                    size: self.size
+#                    pos: self.pos
+        OperatorButton:
+            send_data: root.DIVI
+            keycode: root.key_codes["/"]
+            text: "÷"
+
+    ButtonContainer:
+        NumberButton:
+            send_data: root.SEVEN
+            keycode: root.key_codes["7"]
+            text: "7"
+        NumberButton:
+            send_data: root.EIGHT
+            keycode: root.key_codes["8"]
+            text: "8"
+        NumberButton:
+            send_data: root.NINE
+            keycode: root.key_codes["9"]
+            text: "9"
+        OperatorButton:
+            send_data: root.MULTI
+            keycode: root.key_codes["*"]
+            text: "×"
+
+    ButtonContainer:
+        NumberButton:
+            send_data: root.FOUR
+            keycode: root.key_codes["4"]
+            text: "4"
+        NumberButton:
+            send_data: root.FIVE
+            keycode: root.key_codes["5"]
+            text: "5"
+        NumberButton:
+            send_data: root.SIX
+            keycode: root.key_codes["6"]
+            text: "6"
+        OperatorButton:
+            send_data: root.MINUS
+            keycode: root.key_codes["-"]
+            text: "-"
+
+    ButtonContainer:
+        NumberButton:
+            send_data: root.ONE
+            keycode: root.key_codes["1"]
+            text: "1"
+        NumberButton:
+            send_data: root.TWO
+            keycode: root.key_codes["2"]
+            text: "2"
+        NumberButton:
+            send_data: root.THREE
+            keycode: root.key_codes["3"]
+            text: "3"
+        OperatorButton:
+            send_data: root.PLUS
+            keycode: root.key_codes["+"]
+            text: "+"
+
+    ButtonContainer:
+        NumberButton:
+            size_hint_x: 2
+            send_data: root.ZERO
+            keycode: root.key_codes["0"]
+            text: "0"
+        DecimalButton:
+            send_data: root.DECIMAL
+            keycode: root.key_codes["."]
+            text: "."
+        EqualButton:
+            send_data: root.EQUAL
+            keycode: root.key_codes["enter"]
+            text: "="

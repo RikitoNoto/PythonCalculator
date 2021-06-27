@@ -1,0 +1,19 @@
+#:kivy 2.0.0
+<Display>:
+    width: root.width
+    Label:
+        size: root.size
+        pos: root.pos
+        id: display
+        text: root.text
+        text_size: self.size
+        halign: 'right'
+        valign: 'middle'
+        font_size: root.font_size
+        color: root.MAIN_FONT_COLOR
+        canvas.before:
+            Color:
+                rgb: root.DISPLAY_BACK_GROUND_COLOR
+            Rectangle:
+                pos: self.pos
+                size: self.size

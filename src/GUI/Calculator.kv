@@ -1,0 +1,17 @@
+#:kivy 2.0.0
+<Calculator>:
+    orientation: "vertical"
+    main_display: main_display
+    sub_display: sub_display
+    Display:
+        id: sub_display
+        size_hint_y:0.1
+        text: "sub display"
+        font_size: 50
+    Display:
+        id: main_display
+        size_hint_y: 0.2
+        text: "main display"
+        font_size: 75
+    InputPanel:
+        size_hint_y: 0.7
