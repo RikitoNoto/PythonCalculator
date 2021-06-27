@@ -29,7 +29,7 @@ class CalculatorManager:
     SUB_DISPLAY_INITIAL = ""
 
     def __init__(self):
-        self.__gui = GUIManager(self.num_event_handler, self.op_event_handler, self.eq_event_handler)
+        self.__gui = GUIManager(event_num=self.num_event_handler, event_op=self.op_event_handler, event_eq=self.eq_event_handler, event_ac=self.ac_event_handler)
         self.__reset_current_value()
         self.__history = []
         self.__history_count = 0
@@ -58,8 +58,12 @@ class CalculatorManager:
     def eq_event_handler(self, input):
         self.__calculator.right_value = SendCharacters.to_num(self.__current_value)
         self.__gui.output_main(str(self.__calculator.calculate()))
+        self.__gui.output_sub(self.__calculator.formula)
         self.__registe_history(self.__calculator, del_calculator=True)
         self.__reset_current_value()
+
+    def ac_event_handler(self, input):
+        pass
 
     def create_input_value(self):
         value = SendCharacters.to_num(self.__current_value)

@@ -1,5 +1,6 @@
 import os
 import sys
+import enum
 import unittest
 from unittest.mock import patch
 from unittest.mock import MagicMock
@@ -13,6 +14,17 @@ from src.SendCharacters import SendCharacters
 
 class CalculatorManagerTest(unittest.TestCase):
     CALCULATOR_MODULE_PATH = "src.CalculatorManager.Calculator"
+    class EVENTS(enum.Enum):
+        LEFT_VALUE = enum.auto()
+        OPERATER = enum.auto()
+        RIGHT_VALUE = enum.auto()
+        EQUAL = enum.auto()
+    OPERATORS = {
+        SendCharacters.PLUS: "+",
+        SendCharacters.MINUS: "-",
+        SendCharacters.MULTI: "×",
+        SendCharacters.DIVI: "÷"
+    }
 
     @patch("src.CalculatorManager.GUIManager", spec=GUIManager)
     def setUp(self, gui_stub:MagicMock) -> None:
@@ -39,6 +51,35 @@ class CalculatorManagerTest(unittest.TestCase):
             self.__gui_stub.return_value.output_sub.assert_called_with(text)
 
     @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def input_number(self, value, calculator_stub, delegation=None, *args, **kwargs)->MagicMock:
+        """
+        :param value: 入力する数値
+        :param delegation: 数値入力イベント実行後に行う処理
+
+        :variable send_value: イベント実行が完了した数値を羅列した文字列。
+
+        入力された値を数値一文字づつ入力イベントとして実行する。
+        delegationで関数を受け取っていた場合、その関数を1回のイベントごとにchar, sendvalue, argsとkwargsを引数として実行する。
+        """
+        send_value = ""
+        for char in SendCharacters.consts(value):
+            self.__manager.num_event_handler(char)
+            send_value += char
+            if(delegation):
+                delegation(char, send_value, *args, **kwargs)
+        return calculator_stub
+
+    def check_wrapper_for_input_number(self, checker, char__=False, send_value__=False):
+        def checker_wrapper(char=None, send_value=None, *args, **kwargs):
+            if(char__ and send_value__):
+                return checker(char, send_value, *args, **kwargs)
+            elif(char__ and not send_value__):
+                return checker(char, *args, **kwargs)
+            elif(not char__ and send_value__):
+                return checker(send_value, *args, **kwargs)
+        return checker_wrapper
+
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
     def create_calculator(self, calculator_stub)->MagicMock:
         """
         仮で__calculatorメンバの宣言を行うメソッドを呼び出しする。
@@ -47,12 +88,33 @@ class CalculatorManagerTest(unittest.TestCase):
         self.__manager.op_event_handler(SendCharacters.PLUS)
         return calculator_stub
 
+    def goto_end_of_event(self, calculator_stub, to=None, left_value=None, right_value=None, operator=None)->MagicMock:
+        self.input_number(left_value, delegation=self.check_wrapper_for_input_number(self.main_display_check, char__=False, send_value__=True))
+        calculator_stub.return_value.formula = "{}".format(left_value)
+        if to == self.EVENTS.LEFT_VALUE:
+            return calculator_stub
+
+        calculator_stub.return_value.formula += self.OPERATORS[operator]
+        self.__manager.op_event_handler(operator)
+        self.sub_display_check("{}{}".format(left_value, self.OPERATORS[operator]))
+        if to == self.EVENTS.OPERATER:
+            return calculator_stub
+
+        calculator_stub.return_value.formula += str(right_value)
+        self.input_number(right_value, delegation=self.check_wrapper_for_input_number(self.main_display_check, char__=False, send_value__=True))
+        if to == self.EVENTS.RIGHT_VALUE:
+            return calculator_stub
+
+        self.__manager.eq_event_handler(SendCharacters.EQUAL)
+        self.sub_display_check("{}{}{}".format(left_value, self.OPERATORS[operator], right_value))
+        if to == self.EVENTS.EQUAL:
+            return calculator_stub
+
     def input_value_by_num_event(self, value, operation=SendCharacters.PLUS):
         """
         引数で受け取った数値を頭から順にイベントとして呼び出しをし、最後にオペレータイベントを実行する。
         """
-        for char in SendCharacters.consts(value):
-            self.__manager.num_event_handler(char)
+        self.input_number(value)
         if operation:
             self.__manager.op_event_handler(operation)
 
@@ -226,15 +288,15 @@ class CalculatorManagerTest(unittest.TestCase):
         2回連続の計算ができること
         """
         operator1 = Calculator.PLUS
-        operator2 = Calculator.SUB
+        operator2 = Calculator.DIVI
 
         with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
-            self.goto_finish_calculate(left_value=9, operator=SendCharacters.PLUS, right_value=19, eq_event=True)
+            self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=9, operator=SendCharacters.PLUS, right_value=19)
             self.check_calculator(calculator_stub, left_value=9, right_value=19, operator=operator1)
 
 
-            self.goto_finish_calculate(left_value=102, operator=SendCharacters.MINUS, right_value=392, eq_event=True)
-            self.check_calculator(calculator_stub, left_value=102, right_value=392, operator=operator2)
+            self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=102, operator=SendCharacters.DIVI, right_value=390)
+            self.check_calculator(calculator_stub, left_value=102, right_value=390, operator=operator2)
 
 if __name__ == '__main__':
     unittest.main()
