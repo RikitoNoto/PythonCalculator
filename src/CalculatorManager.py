@@ -13,7 +13,6 @@ class CalculatorManager:
     guiの入力に対しての挙動を定義したクラス。
     TODO: 数値　→　イコール　= 数値の表示
     TODO: 数値　→　オペレーター　→　数値　→　オペレーター　= 結果　&　leftvalue
-    TODO: AC　→　クリア
     TODO: 前の値あり　→　イコール　=　前の値表示
     TODO: 前の値なし　→　イコール　=　0
     TODO: 前の値あり　→　オペレーター　=　前の値をleftvalueに代入
@@ -63,7 +62,7 @@ class CalculatorManager:
         self.__reset_current_value()
 
     def ac_event_handler(self, input):
-        pass
+        self.__calculator = None
 
     def create_input_value(self):
         value = SendCharacters.to_num(self.__current_value)
@@ -84,6 +83,10 @@ class CalculatorManager:
         self.__history_count = self.__history_count + 1
         del self.__calculator
 
+    def get_calculator(self):
+        return self.__calculator
+
+    calculator = property(get_calculator)
 
 if __name__ == '__main__':
     CalculatorManager().run()

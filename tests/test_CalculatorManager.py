@@ -298,5 +298,16 @@ class CalculatorManagerTest(unittest.TestCase):
             self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=102, operator=SendCharacters.DIVI, right_value=390)
             self.check_calculator(calculator_stub, left_value=102, right_value=390, operator=operator2)
 
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_be_able_to_clear_ac_event(self, calculator_stub: MagicMock):
+        """
+        acボタン押下時に持っているcalculatorオブジェクトが消えていること
+        """
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.OPERATER, left_value=103, operator=SendCharacters.DIVI)
+        self.check_calculator(calculator_stub, left_value=103, operator=Calculator.DIVI)
+        self.__manager.ac_event_handler(SendCharacters.AC)
+        self.assertIsNone(self.__manager.calculator)
+
+
 if __name__ == '__main__':
     unittest.main()
