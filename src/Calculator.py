@@ -25,7 +25,8 @@ class Calculator:
         """
         self.__left_valueにleft_valueを代入
         """
-        self.__left_value=left_value
+        self.__left_value = left_value
+        self.__right_value = None
 
     def calculate(self): #TODO 0～3以外の数値が入ったら例外発生させる。後回し。
         """
