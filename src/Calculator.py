@@ -1,3 +1,5 @@
+from enum import IntEnum
+from enum import auto
 
 class Calculator:
 
@@ -11,10 +13,12 @@ class Calculator:
     131=: 1÷1=
 
     """
-    PLUS = 0  #TODO 自動設定(autoメソッド)にしてスムーズに。 後回し。
-    SUB  = 1
-    MULTI = 2
-    DIVI = 3
+    class OPERATORS(IntEnum):
+        PLUS = 0
+        SUB  = auto()
+        MULTI = auto()
+        DIVI = auto()
+        COUNT = auto()
     VALID_TYPE = (int, float)
 
     def __init__(self, left_value):
@@ -35,26 +39,26 @@ class Calculator:
         0～3以外の値だった場合、例外発生させる。
         """
 
-        if self.__operator==self.PLUS: 
-            return self.add()
+        if self.__operator==self.OPERATORS.PLUS:
             """
             もしself.__operatorが0だったら self.add()を実行して返す。
             """
-        elif self.__operator==self.SUB:
-            return self.sub()
+            return self.add()
+        elif self.__operator==self.OPERATORS.SUB:
             """
             もしself.__operatorが1だったら self.sub()を実行して返す。
             """
-        elif self.__operator==self.MULTI:
-            return self.multi()
+            return self.sub()
+        elif self.__operator==self.OPERATORS.MULTI:
             """
             もしself.__operatorが2だったら self.multi()を実行して返す。
-            """   
-        elif self.__operator==self.DIVI:
-            return self.divi()
+            """
+            return self.multi()
+        elif self.__operator==self.OPERATORS.DIVI:
             """
             もしself.__operatorが3だったら self.divi()を実行して返す。
-            """   
+            """
+            return self.divi()
         else:
             return 
 
@@ -109,28 +113,28 @@ class Calculator:
         上記の時、"+"が返る
         """
 
-        if self.__operator==self.PLUS:
+        if self.__operator==self.OPERATORS.PLUS:
             """
             もしself.__operatorがself.PLUSだったら
             "+"を返す。
             """ 
             return "+"
                        
-        elif self.__operator==self.SUB:
+        elif self.__operator==self.OPERATORS.SUB:
             """
             もしself.__operatorがself.SUBだったら
             "-"を返す。
             """ 
             return "-"
             
-        elif self.__operator==self.MULTI:
+        elif self.__operator==self.OPERATORS.MULTI:
             """
             もしself.__operatorがself.MULTIだったら
             "×を返す。
             """ 
             return "×"
             
-        elif self.__operator==self.DIVI:
+        elif self.__operator==self.OPERATORS.DIVI:
             """
             もしself.__operatorがself.DIVIだったら
             "÷を返す。
@@ -239,6 +243,8 @@ class Calculator:
         """ 
         self.__operatorにopを代入
         """
+        if(op >= self.OPERATORS.COUNT):
+            raise self.CalculatorValueError("存在しない演算子です。")
         self.__operator=op
 
     left_value = property(get_left_value, set_left_value)
@@ -255,7 +261,7 @@ if __name__ == '__main__':
     result=Calculator(0)
     result.left_value=10000000
     result.right_value=1000000
-    result.operator=Calculator.MULTI
+    result.operator=Calculator.OPERATORS.MULTI
 
     for a in range(10):
         print(result.index(a))
