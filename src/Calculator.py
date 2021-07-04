@@ -19,7 +19,7 @@ class Calculator:
         MULTI = auto()
         DIVI = auto()
         COUNT = auto()
-    VALID_TYPE = (int, float)
+    VALID_TYPE = (int, float, type(None))
 
     def __init__(self, left_value):
         """
@@ -40,26 +40,38 @@ class Calculator:
         0～3以外の値だった場合、例外発生させる。
         """
 
-        if self.__operator==self.OPERATORS.PLUS:
+        if self.__right_value==None:
+            """
+            もしright_valueの値がNoneだったら
+            opelate関係なく、left_valueの値を返す。
+            """
+            return self.left_value
+            
+            
+        elif self.__operator==self.OPERATORS.PLUS:
             """
             もしself.__operatorが0だったら self.add()を実行して返す。
             """
             return self.add()
+
         elif self.__operator==self.OPERATORS.SUB:
             """
             もしself.__operatorが1だったら self.sub()を実行して返す。
             """
             return self.sub()
+
         elif self.__operator==self.OPERATORS.MULTI:
             """
             もしself.__operatorが2だったら self.multi()を実行して返す。
             """
             return self.multi()
+
         elif self.__operator==self.OPERATORS.DIVI:
             """
             もしself.__operatorが3だったら self.divi()を実行して返す。
             """
             return self.divi()
+            
         else:
             return 
 
@@ -169,21 +181,21 @@ class Calculator:
 
         1+1を返す。※ =が押されたとき。
         """
+        return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value or ""))
 
-        """
+        # """
         
-        try: 右辺str(self.__right_value)の値がなかった場合、例外発生させる。
-        except: 右辺str(self.__right_value)の値がなくても動作させる。
+        # try: 右辺str(self.__right_value)の値がなかった場合、例外発生させる。
+        # except: 右辺str(self.__right_value)の値がなくても動作させる。
 
-        """
-        try:
-            return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value))
+        # """
+        # try:
+        #     return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value))
 
-        except AttributeError:
-            return "{0}{1}".format(str(self.__left_value),str(self.operator_char()))
-            
-
-
+        # except AttributeError:
+        #     return "{0}{1}".format(str(self.__left_value),str(self.operator_char()))
+        
+        
 
         # if self.__right_value==None:
         #     return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()))
@@ -259,13 +271,14 @@ if __name__ == '__main__':
 
 
 
-    result=Calculator(0)
-    result.left_value=10000000
-    result.right_value=1000000
-    result.operator=Calculator.OPERATORS.MULTI
+    # result=Calculator(0)
+    # result.left_value=2
+    # result.right_value= None
+    # result.operator=Calculator.OPERATORS.DIVI
+    # print(result.calculate())
 
-    for a in range(10):
-        print(result.index(a))
+    # for a in range(10):
+    #     print(result.index(a))
     
     # print(format(result.calculate(),'.1E'))
     # print(format(result.calculate(),'.2E'))
@@ -280,11 +293,11 @@ if __name__ == '__main__':
 
 
 
-    # calcu = Calculator(0)
-    # calcu.left_value = 1
-    # calcu.right_value =0
-    # calcu.operator = Calculator.DIVI
-    # print(calcu.formula)
+    calcu = Calculator(0)
+    calcu.left_value = 1
+    calcu.right_value = None
+    calcu.operator = Calculator.OPERATORS.DIVI
+    print(calcu.formula)
     
 
     # operator = 3
