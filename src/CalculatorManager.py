@@ -8,15 +8,17 @@ except ModuleNotFoundError:
     from .Calculator import Calculator
     from .SendCharacters import SendCharacters
 
+OPERATORS = Calculator.OPERATORS
+
 class CalculatorManager:
     """
     guiの入力に対しての挙動を定義したクラス。
     """
     OPERATOR_DICT = {
-        SendCharacters.PLUS: Calculator.PLUS,
-        SendCharacters.MINUS: Calculator.SUB,
-        SendCharacters.MULTI: Calculator.MULTI,
-        SendCharacters.DIVI: Calculator.DIVI
+        SendCharacters.PLUS: OPERATORS.PLUS,
+        SendCharacters.MINUS: OPERATORS.SUB,
+        SendCharacters.MULTI: OPERATORS.MULTI,
+        SendCharacters.DIVI: OPERATORS.DIVI
                      }
     MAIN_DISPLAY_INITIAL = "0"
     SUB_DISPLAY_INITIAL = ""

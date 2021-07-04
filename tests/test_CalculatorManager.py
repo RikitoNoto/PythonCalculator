@@ -11,6 +11,7 @@ from src.GUIManager import GUIManager
 from src.Calculator import Calculator
 from src.SendCharacters import SendCharacters
 
+OPERATOR = Calculator.OPERATORS
 
 class CalculatorManagerTest(unittest.TestCase):
     CALCULATOR_MODULE_PATH = "src.CalculatorManager.Calculator"
@@ -254,13 +255,13 @@ class CalculatorManagerTest(unittest.TestCase):
         """
         operator入力イベントが実行された時にオペレータを正しく登録できているか。(足し算)
         """
-        self.operator_check(SendCharacters.PLUS, Calculator.PLUS)
+        self.operator_check(SendCharacters.PLUS, OPERATOR.PLUS)
 
     def test_when_operator_event_registe_operator_divi(self):
         """
         operator入力イベントが実行された時にオペレータを正しく登録できているか。(割り算)
         """
-        self.operator_check(SendCharacters.DIVI, Calculator.DIVI)
+        self.operator_check(SendCharacters.DIVI, OPERATOR.DIVI)
 
     @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
     def test_when_operator_event_should_be_display_the_formula_to_sub_disp(self, calculator_stub: MagicMock):
@@ -275,7 +276,7 @@ class CalculatorManagerTest(unittest.TestCase):
         """
         計算後、ヒストリーに登録できていること
         """
-        operator = Calculator.PLUS
+        operator = OPERATOR.PLUS
         with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
             self.goto_finish_calculate(SendCharacters.ZERO, SendCharacters.PLUS, SendCharacters.ZERO, True)
             self.assertTrue(self.__manager.history_que(0))
@@ -287,8 +288,8 @@ class CalculatorManagerTest(unittest.TestCase):
         """
         2回連続の計算ができること
         """
-        operator1 = Calculator.PLUS
-        operator2 = Calculator.DIVI
+        operator1 = OPERATOR.PLUS
+        operator2 = OPERATOR.DIVI
 
         with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
             self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=9, operator=SendCharacters.PLUS, right_value=19)
@@ -304,7 +305,7 @@ class CalculatorManagerTest(unittest.TestCase):
         acボタン押下時に持っているcalculatorオブジェクトが消えていること
         """
         self.goto_end_of_event(calculator_stub, to=self.EVENTS.OPERATER, left_value=103, operator=SendCharacters.DIVI)
-        self.check_calculator(calculator_stub, left_value=103, operator=Calculator.DIVI)
+        self.check_calculator(calculator_stub, left_value=103, operator=OPERATOR.DIVI)
         self.__manager.ac_event_handler(SendCharacters.AC)
         self.assertIsNone(self.__manager.calculator)
 
@@ -370,7 +371,7 @@ class CalculatorManagerTest(unittest.TestCase):
         self.goto_end_of_event(calculator_stub, to=self.EVENTS.RIGHT_VALUE, left_value=3234, right_value=6542, operator=SendCharacters.PLUS)
         self.__manager.op_event_handler(SendCharacters.DIVI)
         calculator_stub.assert_called_with(3234 + 6542)
-        self.assertEqual(calculator_stub.return_value.operator, Calculator.DIVI)
+        self.assertEqual(calculator_stub.return_value.operator, OPERATOR.DIVI)
 
 if __name__ == '__main__':
     unittest.main()
