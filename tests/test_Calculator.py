@@ -68,7 +68,7 @@ class CalculatorTest(unittest.TestCase):
         加算のテスト。
         :return:
         """
-        self.calculator.operator=Calculator.PLUS #TODO 加算のオペレータを入力する処理
+        self.calculator.operator=Calculator.OPERATORS.PLUS #TODO 加算のオペレータを入力する処理
         self.assertEqual(self.calculator.calculate(), self.LEFT_VALUE + self.RIGHT_VALUE)
 
     # @unittest.skip("write the code")
@@ -77,7 +77,7 @@ class CalculatorTest(unittest.TestCase):
         減算のテスト
         :return:
         """
-        self.calculator.operator=Calculator.SUB #TODO 減算のオペレータを入力する処理
+        self.calculator.operator=Calculator.OPERATORS.SUB #TODO 減算のオペレータを入力する処理
         self.assertEqual(self.calculator.calculate(), self.LEFT_VALUE - self.RIGHT_VALUE)
 
     # @unittest.skip("write the code")
@@ -86,7 +86,7 @@ class CalculatorTest(unittest.TestCase):
         掛け算のテスト
         :return:
         """
-        self.calculator.operator=Calculator.MULTI #TODO かけ算のオペレータを入力する処理
+        self.calculator.operator=Calculator.OPERATORS.MULTI #TODO かけ算のオペレータを入力する処理
         self.assertEqual(self.calculator.calculate(), self.LEFT_VALUE * self.RIGHT_VALUE)
 
     # @unittest.skip("write the code")
@@ -95,7 +95,7 @@ class CalculatorTest(unittest.TestCase):
         割り算のテスト
         :return:
         """
-        self.calculator.operator=Calculator.DIVI #TODO 割り算のオペレータを入力する処理
+        self.calculator.operator=Calculator.OPERATORS.DIVI #TODO 割り算のオペレータを入力する処理
         self.assertEqual(self.calculator.calculate(), self.LEFT_VALUE / self.RIGHT_VALUE)
 
     # @unittest.skip("write the code")
@@ -105,7 +105,7 @@ class CalculatorTest(unittest.TestCase):
         :return:
         """
         self.test_add()
-        self.assertEqual(self.calculator.formula, "{}+{}=".format(self.LEFT_VALUE, self.RIGHT_VALUE))
+        self.assertEqual(self.calculator.formula, "{}+{}".format(self.LEFT_VALUE, self.RIGHT_VALUE))
 
     # @unittest.skip("write the code")
     def test_formula_sub(self):
@@ -114,7 +114,7 @@ class CalculatorTest(unittest.TestCase):
         :return:
         """
         self.test_sub()
-        self.assertEqual(self.calculator.formula, "{}-{}=".format(self.LEFT_VALUE, self.RIGHT_VALUE))
+        self.assertEqual(self.calculator.formula, "{}-{}".format(self.LEFT_VALUE, self.RIGHT_VALUE))
 
     # @unittest.skip("write the code")
     def test_formula_multi(self):
@@ -123,7 +123,7 @@ class CalculatorTest(unittest.TestCase):
         :return:
         """
         self.test_multi()
-        self.assertEqual(self.calculator.formula, "{}×{}=".format(self.LEFT_VALUE, self.RIGHT_VALUE))
+        self.assertEqual(self.calculator.formula, "{}×{}".format(self.LEFT_VALUE, self.RIGHT_VALUE))
 
     # @unittest.skip("write the code")
     def test_formula_divi(self):
@@ -132,7 +132,7 @@ class CalculatorTest(unittest.TestCase):
         :return:
         """
         self.test_divi()
-        self.assertEqual(self.calculator.formula, "{}÷{}=".format(self.LEFT_VALUE, self.RIGHT_VALUE))
+        self.assertEqual(self.calculator.formula, "{}÷{}".format(self.LEFT_VALUE, self.RIGHT_VALUE))
 
     # @unittest.skip("write the code")
     def test_left_value(self):
@@ -152,19 +152,13 @@ class CalculatorTest(unittest.TestCase):
         self.calculator.right_value = self.RIGHT_VALUE
         self.assertEqual(self.calculator.right_value, self.RIGHT_VALUE)
 
-    def test_invalid_value_in_left_value(self):
+    def test_operator_validation(self):
         """
-        left_valueに無効な値が入っている時に正しく例外が発生すること
-        """
-        with self.assertRaises(Calculator.CalculatorValueError):
-            self.calculator.left_value = "a"
-
-    def test_invalid_value_in_right_value(self):
-        """
-        right_valueに無効な値が入っている時に正しく例外が発生すること
+        オペレータのバリデーションテスト
+        :return:
         """
         with self.assertRaises(Calculator.CalculatorValueError):
-            self.calculator.right_value = "a"
+            self.calculator.operator = Calculator.OPERATORS.COUNT
 
 if __name__ == '__main__':
     unittest.main()
