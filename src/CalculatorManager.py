@@ -50,6 +50,9 @@ class CalculatorManager:
                 self.__calculator = Calculator(0)
             else:
                 self.__calculator = Calculator(self.history_que(0).calculate())
+        elif(self.__calculator and self.__calculator.right_value):
+            self.eq_event_handler(SendCharacters.EQUAL)
+            return self.op_event_handler(input)
         else:
             self.__calculator = Calculator(SendCharacters.to_num(self.__current_value))
         self.__calculator.operator = self.OPERATOR_DICT[input]

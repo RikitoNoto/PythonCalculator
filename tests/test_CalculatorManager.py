@@ -361,5 +361,16 @@ class CalculatorManagerTest(unittest.TestCase):
         self.__manager.op_event_handler(SendCharacters.PLUS)
         calculator_stub.assert_called_with(213+123)
 
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_be_calculate_push_operator_with_right_value(self, calculator_stub: MagicMock):
+        """
+        right_valueが存在するときにoperatorボタンが押下された時に計算ができること
+        """
+        calculator_stub.return_value.calculate.return_value =3234 + 6542
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.RIGHT_VALUE, left_value=3234, right_value=6542, operator=SendCharacters.PLUS)
+        self.__manager.op_event_handler(SendCharacters.DIVI)
+        calculator_stub.assert_called_with(3234 + 6542)
+        self.assertEqual(calculator_stub.return_value.operator, Calculator.DIVI)
+
 if __name__ == '__main__':
     unittest.main()
