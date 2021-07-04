@@ -308,6 +308,58 @@ class CalculatorManagerTest(unittest.TestCase):
         self.__manager.ac_event_handler(SendCharacters.AC)
         self.assertIsNone(self.__manager.calculator)
 
+    def test_should_be_clear_history_more_than_buff(self):
+        """
+        BUFF以上の履歴は消えていること
+        """
+        with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
+            self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=39, operator=SendCharacters.DIVI, right_value=3)
+
+        with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
+            self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=324, operator=SendCharacters.MINUS, right_value=48)
+        for i in range(self.__manager.HISTORY_BUFF-1):
+            with patch(self.CALCULATOR_MODULE_PATH, spec=Calculator) as calculator_stub:
+                self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=132, operator=SendCharacters.MULTI, right_value=34)
+        self.assertEqual(48, self.__manager.history_que(self.__manager.HISTORY_BUFF-1).right_value)
+
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_not_raise_error_when_only_equal(self, calculator_stub: MagicMock):
+        """
+        前の値が存在しない時にイコールボタンだけを押下しても、left_valueに0が代入されて計算されること
+        """
+        self.__manager.eq_event_handler(SendCharacters.EQUAL)
+        calculator_stub.assert_called_with(0)
+        calculator_stub.return_value.calculate.assert_called_with()
+
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_not_raise_error_when_only_equal_with_history(self, calculator_stub: MagicMock):
+        """
+        前の値が存在する時にイコールボタンのみを押下した時に、
+        最後に計算した答えがleft_valueに代入されて計算されること
+        """
+        calculator_stub.return_value.calculate.return_value = 2193 + 34109
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=2193, right_value=34109, operator=SendCharacters.PLUS)
+        self.__manager.eq_event_handler(SendCharacters.EQUAL)
+        calculator_stub.assert_called_with(2193+34109)
+        calculator_stub.return_value.calculate.assert_called_with()
+
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_not_raise_error_when_only_operator(self, calculator_stub: MagicMock):
+        """
+        オペレーターのみ押下された時に0がleft_valueに代入されること
+        """
+        self.__manager.op_event_handler(SendCharacters.PLUS)
+        calculator_stub.assert_called_with(0)
+
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_not_raise_error_when_only_operator_with_history(self, calculator_stub: MagicMock):
+        """
+        オペレーターのみ押下された時に計算結果がleft_valueに代入されること
+        """
+        calculator_stub.return_value.calculate.return_value = 213+123
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=213, right_value=123, operator=SendCharacters.PLUS)
+        self.__manager.op_event_handler(SendCharacters.PLUS)
+        calculator_stub.assert_called_with(213+123)
 
 if __name__ == '__main__':
     unittest.main()

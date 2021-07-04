@@ -11,12 +11,6 @@ except ModuleNotFoundError:
 class CalculatorManager:
     """
     guiの入力に対しての挙動を定義したクラス。
-    TODO: 数値　→　イコール　= 数値の表示
-    TODO: 数値　→　オペレーター　→　数値　→　オペレーター　= 結果　&　leftvalue
-    TODO: 前の値あり　→　イコール　=　前の値表示
-    TODO: 前の値なし　→　イコール　=　0
-    TODO: 前の値あり　→　オペレーター　=　前の値をleftvalueに代入
-    TODO: 前の値なし　→　オペレーター　=　0をleftvalueに代入
     """
     OPERATOR_DICT = {
         SendCharacters.PLUS: Calculator.PLUS,
@@ -26,10 +20,12 @@ class CalculatorManager:
                      }
     MAIN_DISPLAY_INITIAL = "0"
     SUB_DISPLAY_INITIAL = ""
+    HISTORY_BUFF = 100
 
     def __init__(self):
         self.__gui = GUIManager(event_num=self.num_event_handler, event_op=self.op_event_handler, event_eq=self.eq_event_handler, event_ac=self.ac_event_handler)
         self.__reset_current_value()
+        self.__calculator = None
         self.__history = []
         self.__history_count = 0
 
@@ -49,13 +45,26 @@ class CalculatorManager:
         self.__gui.output_main(str(self.__current_value))
 
     def op_event_handler(self, input):
-        self.__calculator = Calculator(SendCharacters.to_num(self.__current_value))
+        if(self.__current_value == ""):
+            if self.__history_count == 0:
+                self.__calculator = Calculator(0)
+            else:
+                self.__calculator = Calculator(self.history_que(0).calculate())
+        else:
+            self.__calculator = Calculator(SendCharacters.to_num(self.__current_value))
         self.__calculator.operator = self.OPERATOR_DICT[input]
         self.__gui.output_sub(self.__calculator.formula)
         self.__reset_current_value()
 
     def eq_event_handler(self, input):
-        self.__calculator.right_value = SendCharacters.to_num(self.__current_value)
+        if self.__current_value is not "":
+            self.__calculator.right_value = SendCharacters.to_num(self.__current_value)
+
+        if not self.__calculator:
+            if self.__history_count == 0:
+                self.__calculator = Calculator(0)
+            else:
+                self.__calculator = Calculator(self.history_que(0).calculate())
         self.__gui.output_main(str(self.__calculator.calculate()))
         self.__gui.output_sub(self.__calculator.formula)
         self.__registe_history(self.__calculator, del_calculator=True)
@@ -69,7 +78,7 @@ class CalculatorManager:
         self.__reset_current_value()
         return value
 
-    def history_que(self, index):
+    def history_que(self, index)->Union[Calculator, None]:
         if self.__history_count > 0:
             return self.__history[index]
         else:
@@ -78,10 +87,15 @@ class CalculatorManager:
     def __reset_current_value(self):
         self.__current_value = ""
 
-    def __registe_history(self, history:Calculator, del_calculator=False):
+    def __registe_history(self, history:Calculator, del_calculator=True):
         self.__history.insert(0, history)
-        self.__history_count = self.__history_count + 1
-        del self.__calculator
+        self.__history_count += 1
+        while self.__history_count > self.HISTORY_BUFF:
+            self.__history.pop()
+            self.__history_count -= 1
+
+        if del_calculator:
+            self.__calculator = None
 
     def get_calculator(self):
         return self.__calculator
