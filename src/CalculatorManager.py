@@ -1,4 +1,6 @@
 from typing import Union
+from enum import IntEnum
+from enum import auto
 try:
     from GUIManager import GUIManager
     from Calculator import Calculator
@@ -23,6 +25,11 @@ class CalculatorManager:
     MAIN_DISPLAY_INITIAL = "0"
     SUB_DISPLAY_INITIAL = ""
     HISTORY_BUFF = 100
+    class PHASE(IntEnum):
+        LEFT_VALUE = auto()
+        OPERATOR = auto()
+        RIGHT_VALUE = auto()
+        EQUAL = auto()
 
     def __init__(self):
         self.__gui = GUIManager(event_num=self.num_event_handler, event_op=self.op_event_handler, event_eq=self.eq_event_handler, event_ac=self.ac_event_handler)
@@ -30,6 +37,7 @@ class CalculatorManager:
         self.__calculator = None
         self.__history = []
         self.__history_count = 0
+        self.__phase = self.PHASE.LEFT_VALUE
 
     def run(self):
         self.__gui.app_run()
@@ -43,25 +51,31 @@ class CalculatorManager:
         self.__gui.output_sub(self.SUB_DISPLAY_INITIAL)
 
     def num_event_handler(self, input):
+        if(self.__phase == self.PHASE.OPERATOR):
+            self.__phase = self.PHASE.RIGHT_VALUE
         self.__current_value += SendCharacters.return_value(input)
         self.__gui.output_main(str(self.__current_value))
 
     def op_event_handler(self, input):
-        if(self.__current_value == ""):
+        if(not self.__calculator and self.__current_value == ""):
+            self.__phase = self.PHASE.OPERATOR
             if self.__history_count == 0:
                 self.__calculator = Calculator(0)
             else:
                 self.__calculator = Calculator(self.history_que(0).calculate())
-        elif(self.__calculator and self.__calculator.right_value):
+        elif(self.__calculator and self.__phase == self.PHASE.RIGHT_VALUE):
             self.eq_event_handler(SendCharacters.EQUAL)
             return self.op_event_handler(input)
-        else:
+        elif(not self.__calculator):
+            self.__phase = self.PHASE.OPERATOR
             self.__calculator = Calculator(SendCharacters.to_num(self.__current_value))
+
         self.__calculator.operator = self.OPERATOR_DICT[input]
         self.__gui.output_sub(self.__calculator.formula)
         self.__reset_current_value()
 
     def eq_event_handler(self, input):
+        self.__phase = self.PHASE.EQUAL
         if self.__current_value is not "":
             self.__calculator.right_value = SendCharacters.to_num(self.__current_value)
 
@@ -77,6 +91,7 @@ class CalculatorManager:
 
     def ac_event_handler(self, input):
         self.__calculator = None
+        self.__phase = self.PHASE.LEFT_VALUE
 
     def create_input_value(self):
         value = SendCharacters.to_num(self.__current_value)

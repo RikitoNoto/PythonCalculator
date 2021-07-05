@@ -373,5 +373,16 @@ class CalculatorManagerTest(unittest.TestCase):
         calculator_stub.assert_called_with(3234 + 6542)
         self.assertEqual(calculator_stub.return_value.operator, OPERATOR.DIVI)
 
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_be_change_operator_(self, calculator_stub: MagicMock):
+        """
+        operatorイベントが2連続で発生したときにオペレーターだけ入れ替わること
+        """
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.OPERATER, left_value=4329, operator=SendCharacters.PLUS)
+        self.__manager.op_event_handler(SendCharacters.DIVI)
+        print(calculator_stub.call_args_list)
+        self.check_calculator(calculator_stub, left_value=4329, operator=OPERATOR.DIVI)
+
+
 if __name__ == '__main__':
     unittest.main()
