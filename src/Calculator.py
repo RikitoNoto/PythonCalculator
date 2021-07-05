@@ -162,14 +162,15 @@ class Calculator:
             """ 
             return ""
 
-    def index(self,digits): #TODO calculateを指数に変換する関数。
-        """
-        digitsに数値1が入った時、__digitsに".1E"が入るようにする。
-        """
-        __digits=digits    
-        return format(self.calculate(),".{0}E".format(__digits)) 
+    def __init__(self, left_value):
+        pass
+
+
+    def calculate(self):
+        pass
 
     @property
+
     def formula(self)->str:    
         """
         str: 文字列に変換。
@@ -204,55 +205,28 @@ class Calculator:
         #     return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value))
         # # return  str(self.__left_value)+str(self.operator_char())+str(self.__right_value) 
         
+        
+    def formula(self)->str:
+        
+
 
     def get_left_value(self):
-
-        """
-        self.__left_valueを返す。
-        """
-        return self.__left_value
+        pass
 
     def set_left_value(self, value):
-        """
-        もしleftvalueに数値以外の値を代入しようとしたときにエラー発生させる。
-        """
-        if(not isinstance(value, self.VALID_TYPE)):
-            raise self.CalculatorValueError("左辺には数値しか代入できません。")
-        self.__left_value=value
-
+        pass
 
     def get_right_value(self):
-        """
-        self.__right_valueを返す。
-        """
-        return self.__right_value
-
-    def set_left_value(self, value):
-        """
-        もしleftvalueに数値以外の値を代入しようとしたときにエラー発生させる。
-        """
-        if(not isinstance(value, self.VALID_TYPE)):
-            raise self.CalculatorValueError("左辺には数値しか代入できません。")
-        self.__left_value=value
-
-    def get_right_value(self):
-        """
-        self.__right_valueを返す。
-        """
-        return self.__right_value
+        pass
 
     def set_right_value(self, value):
-        if(not isinstance(value, self.VALID_TYPE)):
-            raise self.CalculatorValueError("右辺には数値しか代入できません。")
-        self.__right_value=value
+        pass
 
-    def get_operator(self): 
-        """
-        self.__operatorを返す。
-        """
-        return self.__operator
+    def get_operator(self):
+        pass
 
     def set_operator(self, op):
+
         """ 
         self.__operatorにopを代入
         """
