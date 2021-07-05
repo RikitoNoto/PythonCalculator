@@ -30,7 +30,7 @@ class CalculatorManagerTest(unittest.TestCase):
     @patch("src.CalculatorManager.GUIManager", spec=GUIManager)
     def setUp(self, gui_stub:MagicMock) -> None:
         self.__manager = CalculatorManager()
-        self.__manager.gui_initial()
+        self.__manager.gui_initialize()
         self.__gui_stub:MagicMock = gui_stub
 
     def main_display_check(self, text):
@@ -300,6 +300,16 @@ class CalculatorManagerTest(unittest.TestCase):
             self.check_calculator(calculator_stub, left_value=102, right_value=390, operator=operator2)
 
     @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_be_clear_sub_display_when_calculate_double(self, calculator_stub: MagicMock):
+        """
+        2回連続の計算時にサブディスプレイは何も表示されていないこと
+        """
+
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.EQUAL, left_value=9234, operator=SendCharacters.PLUS, right_value=894357)
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.LEFT_VALUE, left_value=102)
+        self.sub_display_check("")
+
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
     def test_should_be_able_to_clear_ac_event(self, calculator_stub: MagicMock):
         """
         acボタン押下時に持っているcalculatorオブジェクトが消えていること
@@ -308,6 +318,17 @@ class CalculatorManagerTest(unittest.TestCase):
         self.check_calculator(calculator_stub, left_value=103, operator=OPERATOR.DIVI)
         self.__manager.ac_event_handler(SendCharacters.AC)
         self.assertIsNone(self.__manager.calculator)
+
+
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_be_clear_display_ac_event(self, calculator_stub: MagicMock):
+        """
+        acボタン押下時にディスプレイが消されていること
+        """
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.OPERATER, left_value=103, operator=SendCharacters.DIVI)
+        self.__manager.ac_event_handler(SendCharacters.AC)
+        self.main_display_check("0")
+        self.sub_display_check("")
 
     def test_should_be_clear_history_more_than_buff(self):
         """

@@ -70,9 +70,9 @@ class CalculatorManager:
         アプリを開始する。
         """
         self.__gui.app_run()
-        self.gui_initial()
+        self.gui_initialize()
 
-    def gui_initial(self):
+    def gui_initialize(self):
         """
         GUIディスプレイの初期化を行う。
         """
@@ -87,6 +87,8 @@ class CalculatorManager:
         """
         if(self.__phase == self.PHASE.OPERATOR):
             self.__phase = self.PHASE.RIGHT_VALUE
+        elif(self.__phase == self.PHASE.LEFT_VALUE):
+            self.__gui.output_sub("")
         self.__current_value += SendCharacters.return_value(input)
         self.__gui.output_main(str(self.__current_value))
 
@@ -157,6 +159,7 @@ class CalculatorManager:
         フェーズをLeftValueへ戻す。
         """
         self.__calculator = None
+        self.gui_initialize()
         self.__phase = self.PHASE.LEFT_VALUE
 
     def create_input_value(self):
