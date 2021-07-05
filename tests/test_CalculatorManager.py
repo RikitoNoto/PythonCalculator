@@ -374,14 +374,22 @@ class CalculatorManagerTest(unittest.TestCase):
         self.assertEqual(calculator_stub.return_value.operator, OPERATOR.DIVI)
 
     @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
-    def test_should_be_change_operator_(self, calculator_stub: MagicMock):
+    def test_should_be_change_operator(self, calculator_stub: MagicMock):
         """
         operatorイベントが2連続で発生したときにオペレーターだけ入れ替わること
         """
         self.goto_end_of_event(calculator_stub, to=self.EVENTS.OPERATER, left_value=4329, operator=SendCharacters.PLUS)
         self.__manager.op_event_handler(SendCharacters.DIVI)
-        print(calculator_stub.call_args_list)
         self.check_calculator(calculator_stub, left_value=4329, operator=OPERATOR.DIVI)
+
+    @patch(CALCULATOR_MODULE_PATH, spec=Calculator)
+    def test_should_be_return_left_value_when_push_number_and_eq(self, calculator_stub: MagicMock):
+        """
+        数値ボタン押下後にイコールボタンが押下された時に押下されていた数値で計算が行われること
+        """
+        self.goto_end_of_event(calculator_stub, to=self.EVENTS.LEFT_VALUE, left_value=39023)
+        self.__manager.eq_event_handler(SendCharacters.EQUAL)
+        self.check_calculator(calculator_stub, left_value=39023)
 
 
 if __name__ == '__main__':
