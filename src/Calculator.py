@@ -14,6 +14,9 @@ class Calculator:
 
     """
     class OPERATORS(IntEnum):
+        """
+        演算子クラス
+        """
         PLUS = 0
         SUB  = auto()
         MULTI = auto()
@@ -27,8 +30,9 @@ class Calculator:
         """
         self.__left_value = left_value
         self.__right_value = None
+        self.__operator = None
 
-    def calculate(self): #TODO 0～3以外の数値が入ったら例外発生させる。後回し。
+    def calculate(self):
         """
         =押されたときに実行される
         計算結果を返す
@@ -73,7 +77,7 @@ class Calculator:
             return self.divi()
             
         else:
-            return 
+            raise ValueError("不明なエラーです。")
 
 
     def add(self):
@@ -98,7 +102,7 @@ class Calculator:
         return self.__left_value * self.__right_value
 
 
-    def divi(self): #TODO __right_valueが0の時の例外補足クラス内に追加。0割が出たら"0 で割ることはできません"と文字列を返す。
+    def divi(self):
         """
         self.__left_value(左辺)とself.__right_value(右辺)の値を割り算したものをresultに代入してresult返す。
 
@@ -110,23 +114,23 @@ class Calculator:
 
         else:
             return self.__left_value / self.__right_value
-        
-        # try:
-        #      self.__right_value==0
-        #     # return "0 で割ることはできません"
-
-        # except:
-        #     return "0 で割ることはできません"
 
 
-    def operator_char(self): #TODO elseに例外を発生させること。operatorに違う値入ったら誤動作起きるので。後回し
+
+    def operator_char(self):
         """
         現在のオペレータの値にあった文字を返す
         例：operetor=PLUS
         上記の時、"+"が返る
         """
+        if self.__operator is None:
+            """
+            operatorに値が代入されていなければ
+            空文字を返す。
+            """
+            return ""
 
-        if self.__operator==self.OPERATORS.PLUS:
+        elif self.__operator==self.OPERATORS.PLUS:
             """
             もしself.__operatorがself.PLUSだったら
             "+"を返す。
@@ -160,9 +164,9 @@ class Calculator:
             それ以外だったら
             エラー
             """ 
-            return ""
+            raise ValueError("不明なエラーです。")
 
-    def index(self,digits): #TODO calculateを指数に変換する関数。
+    def index(self,digits):
         """
         digitsに数値1が入った時、__digitsに".1E"が入るようにする。
         """
@@ -182,27 +186,6 @@ class Calculator:
         1+1を返す。※ =が押されたとき。
         """
         return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value or ""))
-
-        # """
-        
-        # try: 右辺str(self.__right_value)の値がなかった場合、例外発生させる。
-        # except: 右辺str(self.__right_value)の値がなくても動作させる。
-
-        # """
-        # try:
-        #     return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value))
-
-        # except AttributeError:
-        #     return "{0}{1}".format(str(self.__left_value),str(self.operator_char()))
-        
-        
-
-        # if self.__right_value==None:
-        #     return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()))
-
-        # else:
-        #     return "{0}{1}{2}".format(str(self.__left_value),str(self.operator_char()),str(self.__right_value))
-        # # return  str(self.__left_value)+str(self.operator_char())+str(self.__right_value) 
         
 
     def get_left_value(self):
@@ -265,6 +248,9 @@ class Calculator:
     operator = property(get_operator, set_operator) #演算子 +-*/
 
     class CalculatorValueError(Exception):
+        """
+        右辺、左辺、演算子に不正な値が入力された時に発生する例外
+        """
         pass
 
 if __name__ == '__main__':
