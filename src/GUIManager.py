@@ -1,10 +1,10 @@
 from kivy.clock import Clock
 from kivy.core.window import Window
 try:
-    from .GUI.SendCharacters import SendCharacters
+    from .SendCharacters import SendCharacters
     from .GUI.CalculatorApp import CalculatorApp as GuiApp
 except (ModuleNotFoundError, ImportError):
-    from GUI.SendCharacters import SendCharacters
+    from SendCharacters import SendCharacters
     from GUI.CalculatorApp import CalculatorApp as GuiApp
 
 class GUIManager(SendCharacters):
@@ -138,7 +138,6 @@ if __name__ == '__main__':
     ボタンを押下するとそれに対応した文字列がメインディスプレイに、
     一つ前に押したボタンがサブディスプレイに表示される。
     """
-    from functools import partial
     gui = GUIManager()
 
 
