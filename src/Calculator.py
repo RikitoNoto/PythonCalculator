@@ -210,20 +210,6 @@ class Calculator:
         """
         return self.__right_value
 
-    def set_left_value(self, value):
-        """
-        もしleftvalueに数値以外の値を代入しようとしたときにエラー発生させる。
-        """
-        if(not isinstance(value, self.VALID_TYPE)):
-            raise self.CalculatorValueError("左辺には数値しか代入できません。")
-        self.__left_value=value
-
-    def get_right_value(self):
-        """
-        self.__right_valueを返す。
-        """
-        return self.__right_value
-
     def set_right_value(self, value):
         if(not isinstance(value, self.VALID_TYPE)):
             raise self.CalculatorValueError("右辺には数値しか代入できません。")
