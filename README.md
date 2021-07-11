@@ -38,11 +38,8 @@ $Python3 src/CalculatorManager.py
 エクスプローラーからCalculator.batをダブルクリックしてください。
 ![image](res/how_to_execute_for_windows.png)
 
-### ・Mac
-<!---ここにMacでの実行方法を記載--->
-
-### ・Linuxディストリビューション
-<!---ここにLinuxディストリビューションでの実行方法を記載--->
+### ・Mac、Linuxディストリビューション
+Calculator.shを実行してください。
 
 
 
