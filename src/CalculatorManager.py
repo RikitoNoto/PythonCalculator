@@ -69,10 +69,10 @@ class CalculatorManager:
         """
         アプリを開始する。
         """
+        self.__gui.set_schedule_once(self.gui_initialize, 0)
         self.__gui.app_run()
-        self.gui_initialize()
 
-    def gui_initialize(self):
+    def gui_initialize(self, *args, **kwargs):
         """
         GUIディスプレイの初期化を行う。
         """
