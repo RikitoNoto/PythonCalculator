@@ -8,7 +8,7 @@ PythonとKivyを使用して作成したプラットフォームに依存しな�
 使い方は非常にシンプルです。
 
 計算したい数値と演算子を入力してイコールボタンを押すだけです。
-![image](resouces/execute_capture.png)
+![image](res/execute_capture.png)
 
 ## インストール
 1. Pythonのインストール\
@@ -31,6 +31,19 @@ $git clone https://github.com/RikitoNoto/PythonCalculator.git
  ```bash
 $Python3 src/CalculatorManager.py
 ``` 
+
+また、以下の方法でも実行することができます。
+
+### ・Windows
+エクスプローラーからCalculator.batをダブルクリックしてください。
+![image](res/how_to_execute_for_windows.png)
+
+### ・Mac
+<!---ここにMacでの実行方法を記載--->
+
+### ・Linuxディストリビューション
+<!---ここにLinuxディストリビューションでの実行方法を記載--->
+
 
 
 ## ライセンス
