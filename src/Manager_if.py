@@ -1,34 +1,36 @@
+from abc import ABCMeta
+from abc import abstractmethod
 
 try:
-    from Manager_if import Manager_if
     from Calculator import Calculator
-    from CalculatePhases.LeftValuePhase import LeftValuePhase
 except ModuleNotFoundError:
-    from .Manager_if import Manager_if
     from .Calculator import Calculator
-    from .CalculatePhases.LeftValuePhase import LeftValuePhase
 
-class CalculatorManager(Manager_if):
-    def __init__(self):
-        self.__phase = None
+class Manager_if(metaclass=ABCMeta):
 
+    @abstractmethod
     def push_number(self, input):
         pass
 
+    @abstractmethod
     def push_operator(self, input):
         pass
 
+    @abstractmethod
     def push_equal(self, input):
         pass
 
+    @abstractmethod
     def push_ac(self, input):
         pass
 
+    @abstractmethod
     def append_current_value(self):
         pass
 
+    @abstractmethod
     def get_current_phase(self):
-        return self.__phase
+        pass
 
 
     calculator = property(doc="Calculatorインスタンス")

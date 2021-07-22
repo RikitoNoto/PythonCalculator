@@ -1,16 +1,14 @@
+import os
+import sys
+sys.path.append(os.path.abspath(".."))
+
 
 try:
-    from Manager_if import Manager_if
-    from Calculator import Calculator
-    from CalculatePhases.LeftValuePhase import LeftValuePhase
+    from src.Manager_if import Manager_if
 except ModuleNotFoundError:
-    from .Manager_if import Manager_if
-    from .Calculator import Calculator
-    from .CalculatePhases.LeftValuePhase import LeftValuePhase
+    from .src.Manager_if import Manager_if
 
-class CalculatorManager(Manager_if):
-    def __init__(self):
-        self.__phase = None
+class ManagerStub(Manager_if):
 
     def push_number(self, input):
         pass
@@ -28,7 +26,7 @@ class CalculatorManager(Manager_if):
         pass
 
     def get_current_phase(self):
-        return self.__phase
+        pass
 
 
     calculator = property(doc="Calculatorインスタンス")

@@ -6,7 +6,7 @@ from unittest.mock import patch
 from unittest.mock import MagicMock
 sys.path.append(os.path.abspath(".."))
 
-from src.CalculatorManager import CalculatorManager
+from src.CalculatorManager_old import CalculatorManager
 from src.GUIManager import GUIManager
 from src.Calculator import Calculator
 from src.SendCharacters import SendCharacters
