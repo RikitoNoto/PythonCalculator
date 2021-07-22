@@ -19,18 +19,30 @@ from RightValuePhase import RightValuePhase
 class PhaseSystemTest(unittest.TestCase):
 
     def assertEqualPhaseAfterPushNumber(self, current_phase:type(CalculatePhase_if), expect_phase:type(CalculatePhase_if), send_char=SendCharacters.ZERO):
+        """
+        数値ボタンを押したときに想定したフェーズに移行しているかのテスト
+        """
         phase: CalculatePhase_if = current_phase.get_instance()
         self.assertIsInstance(phase.push_number(send_char), expect_phase)
 
     def assertEqualPhaseAfterPushOperator(self, current_phase:type(CalculatePhase_if), expect_phase:type(CalculatePhase_if), send_char=SendCharacters.PLUS):
+        """
+        演算子ボタンを押したときに想定したフェーズに移行しているかのテスト
+        """
         phase: CalculatePhase_if = current_phase.get_instance()
         self.assertIsInstance(phase.push_operator(send_char), expect_phase)
 
     def assertEqualPhaseAfterPushEqual(self, current_phase:type(CalculatePhase_if), expect_phase:type(CalculatePhase_if), send_char=SendCharacters.EQUAL):
+        """
+        イコールボタンを押したときに想定したフェーズに移行しているかのテスト
+        """
         phase: CalculatePhase_if = current_phase.get_instance()
         self.assertIsInstance(phase.push_equal(send_char), expect_phase)
 
     def assertEqualPhaseAfterPushAc(self, current_phase:type(CalculatePhase_if), expect_phase:type(CalculatePhase_if), send_char=SendCharacters.AC):
+        """
+        ACボタンを押したときに想定したフェーズに移行しているかのテスト
+        """
         phase: CalculatePhase_if = current_phase.get_instance()
         self.assertIsInstance(phase.push_ac(send_char), expect_phase)
 
@@ -87,6 +99,24 @@ class PhaseSystemTest(unittest.TestCase):
         RightValueフェーズの時に数値ボタンが押下されてもフェーズが変わらないこと
         """
         self.assertEqualPhaseAfterPushNumber(RightValuePhase, RightValuePhase)
+
+    def test_should_be_change_to_operator_when_push_operator_in_right_phase(self):
+        """
+        RightValueフェーズの時に演算子ボタンが押下されるとOperatorValueフェーズへ変わること
+        """
+        self.assertEqualPhaseAfterPushOperator(RightValuePhase, OperatorPhase)
+
+    def test_should_be_change_to_left_when_push_equal_in_right_phase(self):
+        """
+        RightValueフェーズの時にイコールボタンが押下されるとLeftValueフェーズへ変わること
+        """
+        self.assertEqualPhaseAfterPushEqual(RightValuePhase, LeftValuePhase)
+
+    def test_should_be_change_to_left_when_push_ac_in_right_phase(self):
+        """
+        RightValueフェーズの時にACボタンが押下されるとLeftValueフェーズへ変わること
+        """
+        self.assertEqualPhaseAfterPushAc(RightValuePhase, LeftValuePhase)
 
 if __name__ == '__main__':
     unittest.main()
