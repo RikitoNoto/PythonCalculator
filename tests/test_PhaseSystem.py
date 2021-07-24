@@ -6,8 +6,6 @@ import sys
 sys.path.append(os.path.abspath(".."))
 
 from src.SendCharacters import SendCharacters
-from src.CalculatorManager import CalculatorManager
-from src.Manager_if import Manager_if
 
 sys.path.append(os.path.abspath("../src/CalculatePhases"))
 

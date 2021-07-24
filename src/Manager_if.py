@@ -32,8 +32,13 @@ class Manager_if(metaclass=ABCMeta):
     def get_current_phase(self):
         pass
 
+    @abstractmethod
+    def get_current_value(self):
+        pass
+
 
     calculator = property(doc="Calculatorインスタンス")
     gui = property(doc="GUIManagerインスタンス")
     history = property(doc="過去の計算結果のログ")
     current_phase = property(fget=get_current_phase, doc="現在のフェーズクラスインスタンス")
+    current_value = property(fget=get_current_value, doc="現在ユーザーが入力中の値")
